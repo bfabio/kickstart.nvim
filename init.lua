@@ -734,6 +734,7 @@ require('lazy').setup({
               },
             },
           },
+
           -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
           --
           -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -741,13 +742,6 @@ require('lazy').setup({
           --
           -- But for many setups, the LSP (`ts_ls`) will work just fine
           ts_ls = {},
-          --
-
-          -- Open API
-          -- spectral = {},
-          -- vacuum = {},
-
-          yamlls = {},
 
           lua_ls = {
             -- cmd = { ... },
@@ -763,15 +757,48 @@ require('lazy').setup({
               },
             },
           },
+
+          -- Open API
+          -- spectral = {},
+          -- vacuum = {},
+
+          yamlls = {
+            settings = {
+              yaml = {
+                schemaStore = {
+                  enable = false,
+                  url = '',
+                },
+                schemas = {
+                  ['/home/fabio/dev/schemastore/src/schemas/json/publiccode.json'] = {
+                    'publiccode.yml',
+                    'publiccode.yaml',
+                  },
+                },
+                format = { enable = true },
+                validate = true,
+              },
+            },
+          },
+
           -- PHP
           intelephense = {},
         },
+
         -- This table contains config for all language servers that are *not* installed via Mason.
         -- Structure is identical to the mason table from above.
         others = {
           -- dartls = {},
         },
       }
+      vim.filetype.add {
+        pattern = {
+          ['openapi.*%.ya?ml'] = 'yaml.openapi',
+          ['.*.oas.ya?ml'] = 'yaml.openapi',
+          ['openapi.*%.json'] = 'json.openapi',
+        },
+      }
+
       vim.filetype.add {
         pattern = {
           ['openapi.*%.ya?ml'] = 'yaml.openapi',
