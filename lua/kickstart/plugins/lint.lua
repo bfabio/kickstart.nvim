@@ -52,7 +52,10 @@ return {
           -- Only run the linter in buffers that you can modify in order to
           -- avoid superfluous noise, notably within the handy LSP pop-ups that
           -- describe the hovered symbol using Markdown.
-          if vim.bo.modifiable then
+          -- Skip linting for Claude's config/rules files (~/.claude/): they use a
+          -- relaxed markdown style that doesn't conform to markdownlint rules.
+          local path = vim.api.nvim_buf_get_name(0)
+          if vim.bo.modifiable and not path:match('^' .. vim.env.HOME .. '/%.claude/') then
             lint.try_lint()
           end
         end,
